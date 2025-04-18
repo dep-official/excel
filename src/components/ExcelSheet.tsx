@@ -320,7 +320,7 @@ const ExcelSheet = () => {
 
   const handleRowAdd = () => {
     setData(prevData => {
-      const lastRow = prevData[prevData.length - 1];
+      // const lastRow = prevData[prevData.length - 1];
       const newId = String(Date.now()); // 고유한 ID 생성
       return [...prevData, createEmptyRow(newId)];
     });
@@ -351,21 +351,23 @@ const ExcelSheet = () => {
           // 셀 수정 시 자동 저장
           try {
             const savedData = localStorage.getItem('excelData');
-            const allData = savedData ? JSON.parse(savedData) : {};
-            
-            if (!allData[selectedDate]) {
-              allData[selectedDate] = [];
-            }
+            if (savedData !== null) {
+              const allData = JSON.parse(savedData);
+              
+              if (!allData[selectedDate]) {
+                allData[selectedDate] = [];
+              }
 
-            const existingRowIndex = allData[selectedDate].findIndex((item: StockData) => item.id === rowId);
-            
-            if (existingRowIndex >= 0) {
-              allData[selectedDate][existingRowIndex] = updatedRow;
-            } else {
-              allData[selectedDate].push(updatedRow);
+              const existingRowIndex = allData[selectedDate].findIndex((item: StockData) => item.id === rowId);
+              
+              if (existingRowIndex >= 0) {
+                allData[selectedDate][existingRowIndex] = updatedRow;
+              } else {
+                allData[selectedDate].push(updatedRow);
+              }
+              
+              localStorage.setItem('excelData', JSON.stringify(allData));
             }
-            
-            localStorage.setItem('excelData', JSON.stringify(allData));
           } catch (error) {
             console.error('자동 저장 중 오류 발생:', error);
           }
@@ -375,8 +377,8 @@ const ExcelSheet = () => {
         return row;
       });
 
-      const lastRow = updatedData[updatedData.length - 1];
-      if (lastRow.id === rowId && !lastRow.isNew) {
+      // 마지막 행이 수정되었고 더 이상 새 행이 아닌 경우에만 새 행 추가
+      if (updatedData[updatedData.length - 1].id === rowId && !updatedData[updatedData.length - 1].isNew) {
         const newId = String(Date.now());
         return [...updatedData, createEmptyRow(newId)];
       }
@@ -465,12 +467,9 @@ const ExcelSheet = () => {
   };
 
   const handleLoad = () => {
-    alert('준비중입니다.');
-    return; // 기존 로직 실행 방지
-    
     try {
       const savedData = localStorage.getItem('excelData');
-      if (savedData) {
+      if (savedData !== null) {
         const allData = JSON.parse(savedData);
         if (allData[selectedDate]) {
           setData([...allData[selectedDate], createEmptyRow(String(Date.now()))]);

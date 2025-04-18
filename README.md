@@ -1,22 +1,3 @@
-# Excel
-
-Next.js 14와 TypeScript를 사용한 Excel 스타일의 데이터 관리 애플리케이션입니다.
-
-## 주요 기능
-
-- 데이터 입력 및 수정
-- 날짜별 데이터 관리
-- 자동 저장 기능
-- 실시간 합계 계산
-- 반응형 UI
-
-## 기술 스택
-
-- Next.js 14
-- TypeScript
-- Tailwind CSS
-- NextUI
-
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
